@@ -1,25 +1,29 @@
 <template>
 
-    <side-navigation v-show="canSee"></side-navigation>
+<!--    <side-navigation v-show="canSee"></side-navigation>-->
     <router-view/>
 </template>
 
 <script>
 
-import sideNavigation from "@/components/sideNavigation";
+// import sideNavigation from "@/components/sideNavigation";
 export default {
     components: {
-        sideNavigation
+        // sideNavigation
     },
     data(){
       return {
           canSee: false
       }
     },
-    created() {
+    mounted() {
+        console.log('yes')
         this.$router.push({
-            path: '/'
+            path: '/mainMenu'
         })
+
+
+
     }
 
 }

@@ -18,6 +18,7 @@
 //
 // export default router
 import {createRouter, createWebHistory} from "vue-router";
+// import {createRouter} from "vue-router";
 
 const routes = [
     {
@@ -33,4 +34,5 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 })
+// router.beforeEach()
 export default router

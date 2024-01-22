@@ -71,7 +71,7 @@
 </template>
 
 <script>
-
+    import store from '../store/index'
 
     export default {
         name: "logInSignUp",
@@ -86,15 +86,17 @@
                 register_mail: '',
             }
         },
+        store,
         methods: {
             login() {
                 // let that = this;
                 // let pwd;
                 // pwd = md5(this.login_password)
                 this.$router.push('/mainMenu')
-                // console.log('what')
-                return;
-                // console.log(this.login_password)
+                this.$store.commit('reverseSide')
+                console.log(this.$store.state.showSide)
+                // return;
+                // consoles.log(this.login_password)
                 // if(this.login_username==='YC' && this.login_password==='20020423')
                 // {
                 //     this.$router.push('/mainMenu')
