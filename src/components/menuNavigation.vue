@@ -105,6 +105,7 @@ export default {
   },
   methods: {
     changeDark() {
+      this.$emit('update-data');
       if (!this.themeDark) {
         document.body.setAttribute("theme-color", "dark");
         this.themeDark = !this.themeDark;

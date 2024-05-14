@@ -105,12 +105,13 @@ export default {
   },
   methods: {
     changeDark() {
-      if (!this.theme) {
+      this.$emit('update-data');
+      if (!this.themeDark) {
         document.body.setAttribute("theme-color", "dark");
-        this.theme = !this.theme;
+        this.themeDark = !this.themeDark;
       } else {
         document.body.setAttribute("theme-color", "light");
-        this.theme = !this.theme;
+        this.themeDark = !this.themeDark;
       }
     },
   },

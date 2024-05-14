@@ -2,7 +2,7 @@
 
     <div class="top_bar" style="height: 10vh; position: relative; width: 100%; "
          v-show="canSee">
-        <img :src="background" class="top_image">
+        <img :class="bgClass">
         <div class="stuff">
             <h1 class="header">病虫害检测系统</h1>
 <!--            <div class="message" @click="showMessage">{{notification}}</div>-->
@@ -18,8 +18,8 @@
                 </div>
 
                 <div class="info">
-                    <h3 style="color: white">{{name}}</h3>
-                    <h3 style="color: white">{{type}}</h3>
+                    <p>{{name}}</p>
+                    <p>{{type}}</p>
                 </div>
                 <div class="dropdownMenu">
                     <div class="profile">{{email}}</div>
@@ -36,10 +36,10 @@
 
     <div style="display: flex; height: 90vh">
 <!--        <side-navigation :type="type" ref="childRef" class="side" v-show="canSee"></side-navigation>-->
-        <menuNavigation v-show="type==='用户'&&canSee"></menuNavigation>
-        <menu-navigation2nd v-show="type==='技术人员'&&canSee"></menu-navigation2nd>
-        <menu-navigation3rd v-show="type==='管理人员'&&canSee"></menu-navigation3rd>
-        <menu-navigation4th v-show="type==='运维人员'&&canSee"></menu-navigation4th>
+        <menuNavigation v-show="type==='用户'&&canSee" @update-data="changeBackground"></menuNavigation>
+        <menu-navigation2nd v-show="type==='技术人员'&&canSee" @update-data="changeBackground"></menu-navigation2nd>
+        <menu-navigation3rd v-show="type==='管理人员'&&canSee" @update-data="changeBackground"></menu-navigation3rd>
+        <menu-navigation4th v-show="type==='运维人员'&&canSee" @update-data="changeBackground"></menu-navigation4th>
         <router-view/>
     </div>
     <div class="notification">
@@ -79,8 +79,14 @@ export default {
           email: '',
           telephone: '',
           websocket: null,
-          background: require('../src/assets/images/starry_night.jpg')
+          background: require('../src/assets/images/BigSur2.jpeg'),
+          isBgImage: true
       }
+    },
+    computed: {
+        bgClass() {
+            return this.isBgImage ? 'bg1' : 'bg2';
+        }
     },
     provide(){
       return{
@@ -90,10 +96,14 @@ export default {
           searchInfo: this.searchInfo,
           sideFalse: this.sideFalse,
           initWebSocket: this.initWebSocket,
-          checkImg: this.checkImg
+          checkImg: this.checkImg,
+
       }
     },
     methods: {
+        changeBackground(){
+            this.isBgImage = !this.isBgImage;
+        },
         goLogin(){
             this.$router.push({path: '/'})
             this.websocket.close();
@@ -266,9 +276,32 @@ export default {
         object-fit: cover;
         height: 100%;
         z-index: 0;
-        /*position:relative;*/
+        transition: backgrpund-image 0.5s ease-in-out;
+    }
+    .bg1{
+        background-image: url("../src/assets/images/BigSur2.jpeg");
+        position: absolute;
+        width: 100%;
+        background-size: cover;
+        background-position: center;
+        height: 100%;
+        z-index: 0;
+        margin: 0;
+        transition: background-image 0.5s ease-in-out;
+    }
+    .bg2{
+        background-image: url("../src/assets/images/BigSur3.jpeg");
+        position: absolute;
+        width: 100%;
+        background-size: cover;
+        background-position: center;
+        height: 100%;
+        z-index: 0;
+        margin: 0;
+        transition: background-image 0.5s ease-in-out;
     }
     .header{
+        font-family: '华文楷体';
         position: relative;
         color: white;
         line-height: 80px;
@@ -304,7 +337,14 @@ export default {
     }
     .info{
         /*position: absolute;*/
+        margin-top: 10px;
         z-index: 1;
+    }
+    .info p{
+        font-size: 20px;
+        color: white;
+        font-family: '华文楷体';
+        margin: 0
     }
     h3{
         margin: 5px;
