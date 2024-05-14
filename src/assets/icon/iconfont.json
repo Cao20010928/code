@@ -1,0 +1,93 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1070",
+      "name": "礼物",
+      "font_class": "liwu",
+      "unicode": "f008d",
+      "unicode_decimal": 983181
+    },
+    {
+      "icon_id": "666901",
+      "name": "智能优化",
+      "font_class": "zhinengyouhua",
+      "unicode": "e69a",
+      "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "1125611",
+      "name": "图库2",
+      "font_class": "tuku2",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "1646224",
+      "name": "关闭",
+      "font_class": "guanbi",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "1724899",
+      "name": "月亮",
+      "font_class": "yueliang",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "2076373",
+      "name": " 历史小",
+      "font_class": "lishixiao",
+      "unicode": "e8bd",
+      "unicode_decimal": 59581
+    },
+    {
+      "icon_id": "3278355",
+      "name": "导入",
+      "font_class": "daoru",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "4734132",
+      "name": "客户关系管理，crm",
+      "font_class": "ic_crm",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "6616926",
+      "name": "对勾",
+      "font_class": "duigoux",
+      "unicode": "ec9e",
+      "unicode_decimal": 60574
+    },
+    {
+      "icon_id": "7542727",
+      "name": "24gf-bag2",
+      "font_class": "24gf-bag2",
+      "unicode": "e87f",
+      "unicode_decimal": 59519
+    },
+    {
+      "icon_id": "9384072",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "11405859",
+      "name": "工作人员",
+      "font_class": "gongzuorenyuan",
+      "unicode": "e6cf",
+      "unicode_decimal": 59087
+    }
+  ]
+}

@@ -13,9 +13,8 @@
                         <i class="fas fa-lock"></i>
                         <input type="password" v-model="login_password" placeholder="密码" @keyup.enter="login"/>
                     </div>
-<!--                    <el-button style="position: relative; top: 10px;" type="success" @click="login">立即登录</el-button>-->
-                    <!--<input type="submit" value="立即登录" class="btn solid" @click="login"/>-->
-                    <button @click="login" class="btn">立即登录</button>
+
+                    <button @click="login" class="btn" @click.prevent="btn">立即登录</button>
                 </form>
                 <form action="#" class="sign-up-form">
                     <h2 class="login-title">注册</h2>
@@ -28,6 +27,21 @@
                         <input type="email" v-model="register_mail" placeholder="邮箱" />
                     </div>
                     <div class="input-field">
+                        <i class="fas fa-envelope"></i>
+                        <input type="text" v-model="register_telephone" placeholder="电话" />
+                    </div>
+                    <div class="radio">
+                        <input type="radio" value="customer" v-model="register_type"/>
+                        <label style="line-height: 53px">用户</label>
+                        <input type="radio" value="technic" v-model="register_type"/>
+                        <label style="line-height: 53px">技术人员</label>
+                        <input type="radio" value="admin" v-model="register_type"/>
+                        <label style="line-height: 53px">管理人员</label>
+                        <input type="radio" value="operator" v-model="register_type"/>
+                        <label style="line-height: 53px">运维人员</label>
+                    </div>
+
+                    <div class="input-field">
                         <i class="fas fa-lock"></i>
                         <input type="password" v-model="register_password1" placeholder="密码" />
                     </div>
@@ -35,7 +49,7 @@
                         <i class="fas fa-lock"></i>
                         <input type="password" v-model="register_password2" placeholder="确认密码" />
                     </div>
-                    <button class="btn" @click="register">立即注册</button>
+                    <button class="btn" @click="register" @click.prevent="btn">立即注册</button>
                     <!--<input class="btn" value="立即注册" @click="register"/>-->
                 </form>
             </div>
@@ -58,7 +72,7 @@
                 <div class="content">
                     <h3>已有帐号？</h3>
                     <p>
-                        立即登录已有帐号，享受独家权益。
+                        立即登录已有帐号。
                     </p>
                     <button class="btn transparent" id="sign-in-btn" @click="loginMode = true">
                         去登录
@@ -75,6 +89,7 @@
 
     export default {
         name: "logInSignUp",
+        inject: ['updateName', 'updateSide','searchInfo', 'sideFalse', 'initWebSocket', 'checkImg'],
         data (){
             return {
                 loginMode: true,
@@ -84,107 +99,98 @@
                 register_password1: '',
                 register_password2: '',
                 register_mail: '',
+                register_type: '',
+                register_telephone: '',
+
             }
         },
         store,
         methods: {
             login() {
-                // let that = this;
-                // let pwd;
-                // pwd = md5(this.login_password)
-                this.$router.push('/mainMenu')
-                this.$store.commit('reverseSide')
-                console.log(this.$store.state.showSide)
-                // return;
-                // consoles.log(this.login_password)
-                // if(this.login_username==='YC' && this.login_password==='20020423')
-                // {
-                //     this.$router.push('/mainMenu')
-                //     // console.log('what')
-                //     return;
-                // }
-                // let param = new FormData();
-                // console.log(this.login_username)
-                // // console.log(pwd)
-                // param.append('username', this.login_username);
-                // param.append('password', this.login_password);
-                //
-                // this.axios({
-                //     method: "post",
-                //     url: 'http://127.0.0.1:8080/user/login',
-                //     data: param,
-                // })
-                //     .then(res => {
-                //         if(res.data.errno === 0) {
-                //             let baseInfo = {}
-                //             baseInfo.name = res.data.name
-                //             baseInfo.mail = res.data.email
-                //             baseInfo.avatar = res.data.avatar
-                //             baseInfo.token = res.data.token
-                //             baseInfo.profile = res.data.profile
-                //             baseInfo.isAdmin = res.data.isAdmin
-                //             // console.log(JSON.stringify(baseInfo))
-                //             sessionStorage.setItem('baseInfo', JSON.stringify(baseInfo))
-                //             this.$store.state.baseInfo = baseInfo;
-                //             this.$message({
-                //                 message: '登陆成功',
-                //                 showClose: true,
-                //                 type: 'success',
-                //             })
-                //
-                //             let tmp = sessionStorage.getItem('baseInfo')
-                //             console.log(tmp)
-                //
-                //             if(baseInfo.isAdmin === true) {
-                //                 this.$router.push('/adminHome')
-                //             }
-                //             else {
-                //                 this.$router.push('/')
-                //             }
-                //         }
-                //         else {
-                //             this.$message({
-                //                 message: res.data.msg,
-                //                 showClose: true,
-                //                 type: 'error',
-                //             })
-                //         }
-                //     })
-                //     .catch(err => {
-                //         console.log(err)
-                //     })
-                // console.log('what the hell')
-            },
-            register() {
-                let param = new FormData();
-                // let pwd1, pwd2;
-                // pwd1 = md5(this.register_password1)
-                // pwd2 = md5(this.register_password2)
-
-                console.log(this.register_username)
-                console.log(this.register_mail)
-                console.log(this.register_password1)
-                console.log(this.register_password2)
-                param.append('username', this.register_username);
-                param.append('email', this.register_mail);
-                param.append('password1', this.register_password1);
-                param.append('password2', this.register_password2);
-
-                this.axios({
+                const jsonData = {
+                    name: this.login_username,
+                    password: this.login_password
+                }
+                // console.log(this.$store.state.address + 'user/login')
+                this.$axios({
                     method: "post",
-                    url: 'http://127.0.0.1:8080/user/register',
-                    data: param,
+                    // url: '/api/user/login',
+                    url: this.$store.state.address + 'user/login',
+                    data: jsonData,
                 })
                     .then(res => {
-                        if(res.data.errno === 0) {
+                        console.log(res)
 
-                            this.$message({
-                                message: '注册成功',
-                                showClose: true,
-                                type: 'success',
-                            })
+                        if(res.data.status === 200) {
+                            let type = ''
+                            switch (res.data.type) {
+                                case 'technic':
+                                    type = '技术人员'
+                                    break
+                                case 'customer':
+                                    type = '用户'
+                                    break
+                                case 'admin':
+                                    type = '管理人员'
+                                    break
+                                case 'operator':
+                                    type = '运维人员'
+                                    break
+                            }
+                            let id = res.data.id
+                            let url = ''
+                            let name = this.login_username
+                            if(name.length===1)url = name
+                            else{
+                                let array = name.split(' ')
+                                for(let i in array){
+                                    url += array[i]
+                                    if(i < (array.length-1))
+                                        url += '_'
+                                }
+                            }
+                            let baseInfo = {
+                                id: id,
+                                username: this.login_username,
+                                type: type,
+                                path: 'http://39.107.54.54:8080/image/portraits/'+ url
+                                    + '.jpg' + "?t=" + Math.random(),
 
-                            this.loginMode = true;
+                            }
+                            this.updateName(baseInfo)
+                            sessionStorage.setItem('baseInfo', JSON.stringify(baseInfo))
+
+                            this.searchInfo(this.login_username)
+                            sessionStorage.setItem('picName', url)
+                            sessionStorage.setItem('register', 'false')
+
+                            // this.$store.commit('storeID', id)
+                            //
+                            this.checkImg(baseInfo.path)
+                            this.$store.commit('reverseSide')
+                            sessionStorage.setItem('show', 'true')
+                            this.updateSide()
+                            switch (type) {
+                                case '用户':
+                                    this.$router.push('/mainMenu')
+                                    break
+                                case "管理人员":
+                                    this.$router.push('/tasksForManagers')
+                                    break
+                                case "技术人员":
+                                    this.$router.push('/tasksForExperts')
+                                    break
+                                case "运维人员":
+                                    this.$router.push('/dataImport')
+                            }
+
+                            this.initWebSocket()
+                            // if(baseInfo.isAdmin === true) {
+                            //     this.$router.push('/adminHome')
+                            // }
+                            // else {
+                            //     this.$router.push('/')
+                            // }
                         }
                         else {
                             this.$message({
@@ -197,9 +203,112 @@
                     .catch(err => {
                         console.log(err)
                     })
+
+                //
+                // console.log(this.$store.state.showSide)
+            },
+            register() {
+                if(this.register_password1 !== this.register_password2){
+                    this.$message({
+                        message: '密码不一致',
+                        showClose: true,
+                        type: 'success',
+                    })
+                    return
+                }
+                const jsonData = {
+                    name: this.register_username,
+                    password: this.register_password1,
+                    email: this.register_mail,
+                    type: this.register_type,
+                    telephone: this.register_telephone
+                }
+                console.log(this.$store.state.address + 'user/register')
+                console.log(jsonData)
+                this.$axios({
+                    method: "post",
+                    url: this.$store.state.address + 'user/register',
+                    data: jsonData,
+                })
+                    .then(res => {
+                        console.log(res)
+                        if(res.data.message === '重复的用户名！'){
+                            this.$message({
+                                        message: '用户名重复！',
+                                        showClose: true,
+                                        type: 'success',
+                                    })
+
+                        }
+                        else if(res.data.message === '注册成功！'){
+
+                            sessionStorage.setItem('register', 'true')
+                            this.searchInfo(this.register_username)
+                            this.initWebSocket()
+                            this.updateSide()
+                            let type = ''
+                            switch (this.register_type) {
+                                case 'technic':
+                                    type = '技术人员'
+                                    break
+                                case 'customer':
+                                    type = '用户'
+                                    break
+                                case 'admin':
+                                    type = '管理人员'
+                                    break
+                                case 'operator':
+                                    type = '运维人员'
+                                    break
+                            }
+                            let id = res.data.id
+                            let url = ''
+                            let name = this.register_username
+                            if(name.length===1)url = name
+                            else{
+                                let array = name.split(' ')
+                                for(let i in array){
+                                    url += array[i]
+                                    if(i < (array.length-1))
+                                        url += '_'
+                                }
+                            }
+                            let baseInfo = {
+                                id: id,
+                                username: this.register_username,
+                                type: type,
+                                path: 'http://39.107.54.54:8080/image/portraits/'+ url
+                                    + '.jpg' + "?t=" + Math.random(),
+                            }
+                            sessionStorage.setItem('baseInfo', JSON.stringify(baseInfo))
+                            this.updateName(baseInfo)
+                            this.checkImg(baseInfo.path)
+                            sessionStorage.setItem('picName', url)
+                            switch (type) {
+                                case '用户':
+                                    this.$router.push('/mainMenu')
+                                    break
+                                case "管理人员":
+                                    this.$router.push('/tasksForManagers')
+                                    break
+                                case "技术人员":
+                                    this.$router.push('/tasksForExperts')
+                                    break
+                                case "运维人员":
+                                    this.$router.push('/dataImport')
+                            }
+                            this.initWebSocket()
+                        }
+
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                console.log(jsonData)
             },
         },
         mounted() {
+            this.sideFalse()
         }
     }
 </script>
@@ -216,6 +325,12 @@
     body,
     input {
         font-family: "Poppins", sans-serif;
+    }
+    label {
+        font-family: "Poppins", sans-serif;
+        color: #acacac;
+        /*transition: 0.5s;*/
+        font-size: 15px;
     }
 
     .container {
@@ -272,7 +387,51 @@
         color: #444;
         margin-bottom: 10px;
     }
-
+    input[type="radio"] {
+        /*opacity: 0;*/
+        margin: 0 0 0 10px;
+        zoom: 150%;
+    }
+    /*label {*/
+    /*    display: inline-block;*/
+    /*    cursor: pointer;*/
+    /*    padding: 0 .5rem ;*/
+    /*}*/
+    /*html {*/
+    /*    font-size: 16px;*/
+    /*    padding: 30px;*/
+    /*    line-height: 1.2rem;*/
+    /*}*/
+    /*input[type="radio"]:checked+label:before,input[type="radio"]+label:before {*/
+    /*    content: "";*/
+    /*    height: 1rem;*/
+    /*    width: 1rem;*/
+    /*    display: block;*/
+    /*    margin-top: 20px;*/
+    /*    border: .125rem solid #aaa;*/
+    /*    border-radius: 50%;*/
+    /*    position: absolute;*/
+    /*    margin-left: -1.5rem;*/
+    /*}*/
+    /*input[type="radio"]:checked+label:before {*/
+    /*    box-shadow: .125rem .125rem 0 #fff inset, -.125rem -.125rem 0 #fff inset,*/
+    /*    -.125rem .125rem 0 #fff inset, .125rem -.125rem 0 #fff inset,*/
+    /*    .3rem  .3rem 0 #aaa inset,-.5rem -.5rem 0 #bbb inset;*/
+    /*}*/
+    .radio{
+        display: flex;
+        justify-content: center;
+        max-width: 380px;
+        width: 100%;
+        background-color: #f0f0f0;
+        margin: 10px 0;
+        height: 55px;
+        border-radius: 55px;
+        /*display: grid;*/
+        /*grid-template-columns: 15% 85%;*/
+        /*padding: 0 0.4rem;*/
+        position: relative;
+    }
     .input-field {
         max-width: 380px;
         width: 100%;
@@ -306,6 +465,7 @@
 
     .input-field input::placeholder {
         color: #aaa;
+        /*line-height: 100px;*/
         font-weight: 500;
     }
 
